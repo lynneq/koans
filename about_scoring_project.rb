@@ -31,7 +31,53 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 
 def score(dice)
   # You need to write this method
+  return 0 if dice.length == 0
+  
+  set = {}  
+  dice.each do |side|
+    if set.has_key?(side)
+      set[side]+=1
+    else
+      set[side]=1
+    end
+  end
+
+  score = 0
+
+  if set.has_key?(1) 
+    if set[1] >= 3
+      score += 1000 + 100* (set[1]-3)
+    end
+    if set[1] < 3
+      score += set[1]*100
+    end
+  end
+
+  if set.has_key?(5) 
+    if set[5]>=3
+      score+=500 + 50*(set[5]-3)
+    end
+    if set[5]<3 
+      score += set[5]*50
+    end
+  end
+  
+  if set.has_key?(2) 
+    score+= 100*2 if set[2]>=3
+  end
+  
+  if set.has_key?(3) 
+    score+= 100*3 if set[3]>=3
+  end
+  if set.has_key?(4) 
+    score+= 100*4 if set[4]>=3
+  end
+  if set.has_key?(6)
+    score+= 100*6 if set[6]>=3
+  end
+  score
 end
+
 
 class AboutScoringProject < EdgeCase::Koan
   def test_score_of_an_empty_list_is_zero
