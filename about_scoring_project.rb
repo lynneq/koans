@@ -31,49 +31,17 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 
 def score(dice)
   # You need to write this method
-  return 0 if dice.length == 0
-  
-  set = {}  
+  set = Hash.new 0
   dice.each do |side|
-    if set.has_key?(side)
-      set[side]+=1
-    else
-      set[side]=1
-    end
+    set[side]+=1
   end
 
-  score = 0
-
-  if set.has_key?(1) 
-    if set[1] >= 3
-      score += 1000 + 100* (set[1]-3)
-    end
-    if set[1] < 3
-      score += set[1]*100
-    end
-  end
-
-  if set.has_key?(5) 
-    if set[5]>=3
-      score+=500 + 50*(set[5]-3)
-    end
-    if set[5]<3 
-      score += set[5]*50
-    end
-  end
-  
-  if set.has_key?(2) 
-    score+= 100*2 if set[2]>=3
-  end
-  
-  if set.has_key?(3) 
-    score+= 100*3 if set[3]>=3
-  end
-  if set.has_key?(4) 
-    score+= 100*4 if set[4]>=3
-  end
-  if set.has_key?(6)
-    score+= 100*6 if set[6]>=3
+  score = 0  
+  set.each do |key, value|
+    triple, remainer = value / 3, value % 3
+    score+= (1000 * triple) + (remainer * 100) if key == 1
+    score+= (500 * triple) + (remainer * 50) if key == 5
+    score+= (100 * key) if (key!=1 and key!=5) and value>=3
   end
   score
 end
